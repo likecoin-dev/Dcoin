@@ -1200,6 +1200,8 @@ bool WriteBlockToDisk(CBlock& block, CDiskBlockPos& pos)
 
     // Write index header       (Запись индекса заголовка)
     unsigned int nSize = fileout.GetSerializeSize(block);
+    printf("\n--------- nSize = %d\n",nSize);         // tttttttttttttt
+    block.print();                                    // tttttttttttttt
     fileout << FLATDATA(Params().MessageStart()) << nSize;
 
     // Write block
@@ -1229,6 +1231,8 @@ bool ReadBlockFromDisk(CBlock& block, const CDiskBlockPos& pos)
     // Read block
     try {
         filein >> block;
+        printf("\n--------- 1234 main.cpp filein >> block ---------\n");        // tttttttttttttt
+        block.print();                                                          // tttttttttttttt
     }
     catch (std::exception &e) {
         return error("%s() : deserialize or I/O error", __PRETTY_FUNCTION__);
@@ -1243,10 +1247,19 @@ bool ReadBlockFromDisk(CBlock& block, const CDiskBlockPos& pos)
 
 bool ReadBlockFromDisk(CBlock& block, const CBlockIndex* pindex)
 {
-    if (!ReadBlockFromDisk(block, pindex->GetBlockPos()))
+    if (!ReadBlockFromDisk(block, pindex->GetBlockPos())){
+        printf("==++++++++???????++++++++==\n");
+        block.print();                                              // tttttttttttttttt
         return false;
-    if (block.GetHash() != pindex->GetBlockHash())
+    }
+    if (block.GetHash() != pindex->GetBlockHash()){                 // tttttttttttttttt
+
+        block.print();                                              // tttttttttttttttt
+        printf("block.GetHash()  %s\n", block.GetHash().ToString().c_str());
+        printf("pindex  %s\n", (pindex->GetBlockHash()).ToString().c_str());
+
         return error("ReadBlockFromDisk(CBlock&, CBlockIndex*) : GetHash() doesn't match index");
+    }
     return true;
 }
 
@@ -1974,7 +1987,7 @@ bool SetBestChain(CValidationState &state, CBlockIndex* pindexNew)
     BOOST_FOREACH(CBlockIndex* pindex, vDisconnect) {
         CBlock block;
         if (!ReadBlockFromDisk(block, pindex))
-            return state.Abort(_("Failed to read block"));
+            return state.Abort(_("Failed to read block 0"));
         int64 nStart = GetTimeMicros();
         if (!DisconnectBlock(block, state, pindex, view))
             return error("SetBestBlock() : DisconnectBlock %s failed", pindex->GetBlockHash().ToString().c_str());
@@ -1994,7 +2007,7 @@ bool SetBestChain(CValidationState &state, CBlockIndex* pindexNew)
     BOOST_FOREACH(CBlockIndex *pindex, vConnect) {
         CBlock block;
         if (!ReadBlockFromDisk(block, pindex))
-            return state.Abort(_("Failed to read block"));
+            return state.Abort(_("Failed to read block 1"));
         int64 nStart = GetTimeMicros();
         if (!ConnectBlock(block, state, pindex, view)) {
             if (state.IsInvalid()) {

@@ -115,6 +115,7 @@ class CTxOut
 {
 public:
     int64 nValue;
+//    int64 Dvalue;                                   ////////// новое CTxOut //////////
     CScript scriptPubKey;
 
     CTxOut()
@@ -122,17 +123,20 @@ public:
         SetNull();
     }
 
-    CTxOut(int64 nValueIn, CScript scriptPubKeyIn);
+//    CTxOut(int64 nValueIn, CScript scriptPubKeyIn);
+    CTxOut(int64 nValueIn, CScript scriptPubKeyIn, int64 Dvalue);   ////////// новое CTxOut //////////
 
     IMPLEMENT_SERIALIZE
     (
         READWRITE(nValue);
         READWRITE(scriptPubKey);
+//        READWRITE(Dvalue);                          ////////// новое CTxOut //////////
     )
 
     void SetNull()
     {
         nValue = -1;
+//        Dvalue = -1;                                 ////////// новое CTxOut //////////
         scriptPubKey.clear();
     }
 
@@ -145,7 +149,7 @@ public:
 
     bool IsDust(int64 nMinRelayTxFee) const
     {
-        // "Dust" is defined in terms of CTransaction::nMinRelayTxFee,          "Пыль" определяется с точки зрения CTransaction: :nMinRelayTxFee,
+        // "Dust" is defined in terms of CTransaction::nMinRelayTxFee,          "Пыль" определяется с точки зрения CTransaction::nMinRelayTxFee,
         // which has units satoshis-per-kilobyte.                               подразделения satoshis-per-kilobyte.
         // If you'd pay more than 1/3 in fees                                   Если вы хотите платить больше, чем 1/3 платы от затрат,
         // to spend something, then we consider it dust.                        то мы считаем, что это пыль.
@@ -159,6 +163,7 @@ public:
     friend bool operator==(const CTxOut& a, const CTxOut& b)
     {
         return (a.nValue       == b.nValue &&
+//                a.Dvalue       == b.Dvalue &&       ////////// новое CTxOut //////////
                 a.scriptPubKey == b.scriptPubKey);
     }
 
@@ -254,11 +259,16 @@ public:
     IMPLEMENT_SERIALIZE(({
         if (!fRead) {
             uint64 nVal = CompressAmount(txout.nValue);
+//            uint64 Dval = CompressAmount(txout.Dvalue);     ////////// новое CTxOut //////////
             READWRITE(VARINT(nVal));
+//            READWRITE(VARINT(Dval));                        ////////// новое CTxOut //////////
         } else {
             uint64 nVal = 0;
+//            uint64 Dval = 0;                                ////////// новое CTxOut //////////
             READWRITE(VARINT(nVal));
+//            READWRITE(VARINT(Dval));                        ////////// новое CTxOut //////////
             txout.nValue = DecompressAmount(nVal);
+//            txout.Dvalue = DecompressAmount(Dval);          ////////// новое CTxOut //////////
         }
         CScriptCompressor cscript(REF(txout.scriptPubKey));
         READWRITE(cscript);
@@ -555,9 +565,11 @@ public:
     uint256 hashMerkleRoot;
     unsigned int nTime;
     unsigned int nBits;
-    unsigned int nNonce;
-    uint64 Dbase[2];          ////////// новое //////////
-    uint64 coinDs[2];         ////////// новое //////////
+    unsigned int dBase0;          ////////// новое //////////
+    unsigned int dBase1;          ////////// новое //////////
+    unsigned int coinD0;          ////////// новое //////////
+    unsigned int coinD1;          ////////// новое //////////
+    unsigned int nNonce;                // от перемены места меняется хеш
 
     CBlockHeader()
     {
@@ -572,11 +584,11 @@ public:
         READWRITE(hashMerkleRoot);
         READWRITE(nTime);
         READWRITE(nBits);
+        READWRITE(dBase0);        ////////// новое //////////
+        READWRITE(dBase1);        ////////// новое //////////
+        READWRITE(coinD0);        ////////// новое //////////
+        READWRITE(coinD1);        ////////// новое //////////
         READWRITE(nNonce);
-        READWRITE(Dbase[0]);        ////////// новое //////////
-        READWRITE(Dbase[1]);        ////////// новое //////////
-        READWRITE(coinDs[0]);       ////////// новое //////////
-        READWRITE(coinDs[1]);       ////////// новое //////////
     )
 
     void SetNull()
@@ -586,11 +598,11 @@ public:
         hashMerkleRoot = 0;
         nTime = 0;
         nBits = 0;
+        dBase0 = 0;         ////////// новое //////////
+        dBase1 = 0;         ////////// новое //////////
+        coinD0 = 0;        ////////// новое //////////
+        coinD1 = 0;        ////////// новое //////////
         nNonce = 0;
-        Dbase[0] = 0;         ////////// новое //////////
-        Dbase[1] = 0;         ////////// новое //////////
-        coinDs[0] = 0;        ////////// новое //////////
-        coinDs[1] = 0;        ////////// новое //////////
     }
 
     bool IsNull() const
@@ -648,11 +660,11 @@ public:
         block.hashMerkleRoot = hashMerkleRoot;
         block.nTime          = nTime;
         block.nBits          = nBits;
+        block.dBase0         = dBase0;       ////////// новое //////////
+        block.dBase1         = dBase1;       ////////// новое //////////
+        block.coinD0         = coinD0;       ////////// новое //////////
+        block.coinD1         = coinD1;       ////////// новое //////////
         block.nNonce         = nNonce;
-        block.Dbase[0]       = Dbase[0];       ////////// новое //////////
-        block.Dbase[1]       = Dbase[1];       ////////// новое //////////
-        block.coinDs[0]      = coinDs[0];      ////////// новое //////////
-        block.coinDs[1]      = coinDs[1];      ////////// новое //////////
         return block;
     }
 

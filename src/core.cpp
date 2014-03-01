@@ -50,9 +50,10 @@ void CTxIn::print() const
     printf("%s\n", ToString().c_str());
 }
 
-CTxOut::CTxOut(int64 nValueIn, CScript scriptPubKeyIn)
+CTxOut::CTxOut(int64 nValueIn, CScript scriptPubKeyIn, int64 DvalueIn)
 {
     nValue = nValueIn;
+//    Dvalue = DvalueIn;                             ////////// новое CTxOut //////////
     scriptPubKey = scriptPubKeyIn;
 }
 
@@ -289,6 +290,10 @@ void CBlock::print() const
         hashMerkleRoot.ToString().c_str(),
         nTime, nBits, nNonce,
         vtx.size());
+    printf("dBase0=%d\n", dBase0);
+    printf("dBase1=%d\n", dBase1);
+    printf("coinD0=%d\n", coinD0);
+    printf("coinD1=%d\n", coinD1);    //printf("coinDD=%"PRI64d"\n", coinDD);
     for (unsigned int i = 0; i < vtx.size(); i++)
     {
         printf("  ");

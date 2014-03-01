@@ -32,7 +32,7 @@ public:
         vAlertPubKey = ParseHex("04fc9702847840aaf195de8442ebecedf5b095cdbb9bc716bda9110971b28a49e0ead8564ff0db22209e0374782c093bb899692d524e9d6a6956e7c5ecbcd68284");
         nDefaultPort = 28333;
         nRPCPort = 28332;
-        bnProofOfWorkLimit = CBigNum(~uint256(0) >> 32);
+        bnProofOfWorkLimit = CBigNum(~uint256(0) >> 1);
         nSubsidyHalvingInterval = 210;
 
         // Build the genesis block. Note that the output of the genesis coinbase cannot
@@ -51,21 +51,27 @@ public:
         txNew.vout.resize(1);
         txNew.vin[0].scriptSig = CScript() << 486604799 << CBigNum(4) << vector<unsigned char>((const unsigned char*)pszTimestamp, (const unsigned char*)pszTimestamp + strlen(pszTimestamp));
         txNew.vout[0].nValue = 50 * COIN;
+//        txNew.vout[0].Dvalue = 11 * COIN;       ////////// новое //////////
         txNew.vout[0].scriptPubKey = CScript() << ParseHex("04678afdb0fe5548271967f1a67130b7105cd6a828e03909a67962e0ea1f61deb649f6bc3f4cef38c4f35504e51ec112de5c384df7ba0b8d578a4c702b6bf11d5f") << OP_CHECKSIG;
         genesis.vtx.push_back(txNew);
         genesis.hashPrevBlock = 0;
         genesis.hashMerkleRoot = genesis.BuildMerkleTree();
         genesis.nVersion = 1;
         genesis.nTime    = 1231006505;
-        genesis.nBits    = 0x1d00ffff;
+        genesis.nBits    = 0x207fffff;
+//        genesis.nBits    = 0x1d00ffff;
         genesis.nNonce   = 2083236893;
-        genesis.Dbase[0]    = 50 * COIN;      ////////// новое //////////
-        genesis.Dbase[1]    = 50 * COIN;      ////////// новое //////////
-        genesis.coinDs[0]   = 50 * COIN;      ////////// новое //////////
-        genesis.coinDs[1]   = 50 * COIN;      ////////// новое //////////
+        genesis.dBase0   = 20000000;        ////////// новое //////////
+        genesis.dBase1   = 20000000;        ////////// новое //////////
+        genesis.coinD0   = 20000000;        ////////// новое //////////
+        genesis.coinD1   = 20000000;        ////////// новое //////////
 
         hashGenesisBlock = genesis.GetHash();
-        assert(hashGenesisBlock == uint256("0x000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f"));
+        printf("hashGenesisBlock  %s\n\n",hashGenesisBlock.ToString().c_str());
+//        genesis.print();                                  // tttttttttttttt
+
+//        assert(hashGenesisBlock == uint256("0x68cee22f4538bffc46b9372798f641af44f98539b1cf646af0f8ff3a196163c1"));
+//        assert(hashGenesisBlock == uint256("0x000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f"));
         assert(genesis.hashMerkleRoot == uint256("0x4a5e1e4baab89f3a32518a88c31bc87f618f76673e2cc77ab2127b7afdeda33b"));
 
 //        vSeeds.push_back(CDNSSeedData("bitcoin.sipa.be", "seed.bitcoin.sipa.be"));
@@ -128,10 +134,10 @@ public:
         // Modify the testnet genesis block so the timestamp is valid for a later start.    Измените блок генезис testnet так чтобы временная метка была действительна для позднего старта.
         genesis.nTime = 1296688602;
         genesis.nNonce = 414098458;
-        genesis.Dbase[0]    = 50 * COIN;      ////////// новое //////////
-        genesis.Dbase[1]    = 50 * COIN;      ////////// новое //////////
-        genesis.coinDs[0]   = 50 * COIN;      ////////// новое //////////
-        genesis.coinDs[1]   = 50 * COIN;      ////////// новое //////////
+        genesis.dBase0    = 50 * COIN;      ////////// новое //////////
+        genesis.dBase1    = 50 * COIN;      ////////// новое //////////
+        genesis.coinD0   = 50 * COIN;      ////////// новое //////////
+        genesis.coinD1   = 50 * COIN;      ////////// новое //////////
         hashGenesisBlock = genesis.GetHash();
         assert(hashGenesisBlock == uint256("000000000933ea01ad0ee984209779baaec3ced90fa3f408719526f8d77f4943"));
 
@@ -153,14 +159,14 @@ public:
         genesis.nTime = 1296688602;
         genesis.nBits = 0x207fffff;
         genesis.nNonce = 2;
-        genesis.Dbase[0]    = 55 * COIN;      ////////// новое //////////
-        genesis.Dbase[1]    = 55 * COIN;      ////////// новое //////////
-        genesis.coinDs[0]   = 55 * COIN;      ////////// новое //////////
-        genesis.coinDs[1]   = 55 * COIN;      ////////// новое //////////
+        genesis.dBase0   = 55;      ////////// новое //////////
+        genesis.dBase1   = 55;      ////////// новое //////////
+        genesis.coinD0   = 55;      ////////// новое //////////
+        genesis.coinD1   = 55;      ////////// новое //////////
         hashGenesisBlock = genesis.GetHash();
         nDefaultPort = 38444;
         strDataDir = "testnet3";
-        assert(hashGenesisBlock == uint256("0x0f9188f13cb7b2c71f2a335e3a4fc328bf5beb436012afca590b1a11466e2206"));
+//        assert(hashGenesisBlock == uint256("0x0f9188f13cb7b2c71f2a335e3a4fc328bf5beb436012afca590b1a11466e2206"));
 
         vSeeds.clear();  // Regtest mode doesn't have any DNS seeds.                    Regtest режим не имеет любых DNS сидов.
 
@@ -188,14 +194,14 @@ public:
         genesis.nTime = 1296688602;
         genesis.nBits = 0x207fffff;
         genesis.nNonce = 2;
-        genesis.Dbase[0]    = 55 * COIN;      ////////// новое //////////
-        genesis.Dbase[1]    = 55 * COIN;      ////////// новое //////////
-        genesis.coinDs[0]   = 55 * COIN;      ////////// новое //////////
-        genesis.coinDs[1]   = 55 * COIN;      ////////// новое //////////
+        genesis.dBase0   = 55;      ////////// новое //////////
+        genesis.dBase1   = 55;      ////////// новое //////////
+        genesis.coinD0   = 55;      ////////// новое //////////
+        genesis.coinD1   = 55;      ////////// новое //////////
         hashGenesisBlock = genesis.GetHash();
         nDefaultPort = 38444;
         strDataDir = "regtest";
-        assert(hashGenesisBlock == uint256("0x0f9188f13cb7b2c71f2a335e3a4fc328bf5beb436012afca590b1a11466e2206"));
+//        assert(hashGenesisBlock == uint256("0x0f9188f13cb7b2c71f2a335e3a4fc328bf5beb436012afca590b1a11466e2206"));
 
         vSeeds.clear();  // Regtest mode doesn't have any DNS seeds.                    Regtest режим не имеет любых DNS сидов.
 

@@ -799,8 +799,12 @@ public:
     unsigned int nTime;
     unsigned int nBits;
     unsigned int nNonce;
-    uint64 Dbase[2];          ////////// новое //////////
-    uint64 coinDs[2];         ////////// новое //////////
+//    uint64 Dbase[2];          ////////// новое //////////
+//    uint64 coinD[2];         ////////// новое //////////
+    unsigned int dBase0;          ////////// новое //////////
+    unsigned int dBase1;          ////////// новое //////////
+    unsigned int coinD0;          ////////// новое //////////
+    unsigned int coinD1;          ////////// новое //////////
 
 
     CBlockIndex()
@@ -820,11 +824,11 @@ public:
         hashMerkleRoot = 0;
         nTime          = 0;
         nBits          = 0;
+        dBase0         = 0;      ////////// новое //////////
+        dBase1         = 0;      ////////// новое //////////
+        coinD0         = 0;      ////////// новое //////////
+        coinD1         = 0;      ////////// новое //////////
         nNonce         = 0;
-        Dbase[0]       = 0;      ////////// новое //////////
-        Dbase[1]       = 0;      ////////// новое //////////
-        coinDs[0]      = 0;      ////////// новое //////////
-        coinDs[1]      = 0;      ////////// новое //////////
     }
 
     CBlockIndex(CBlockHeader& block)
@@ -844,11 +848,11 @@ public:
         hashMerkleRoot = block.hashMerkleRoot;
         nTime          = block.nTime;
         nBits          = block.nBits;
+        dBase0         = block.dBase0;          ////////// новое //////////
+        dBase1         = block.dBase1;          ////////// новое //////////
+        coinD0         = block.coinD0;          ////////// новое //////////
+        coinD1         = block.coinD1;          ////////// новое //////////
         nNonce         = block.nNonce;
-        Dbase[0]       = block.Dbase[0];          ////////// новое //////////
-        Dbase[1]       = block.Dbase[1];          ////////// новое //////////
-        coinDs[0]      = block.coinDs[0];         ////////// новое //////////
-        coinDs[1]      = block.coinDs[1];         ////////// новое //////////
     }
 
     CDiskBlockPos GetBlockPos() const {
@@ -878,11 +882,11 @@ public:
         block.hashMerkleRoot = hashMerkleRoot;
         block.nTime          = nTime;
         block.nBits          = nBits;
+        block.dBase0         = dBase0;          ////////// новое //////////
+        block.dBase1         = dBase1;          ////////// новое //////////
+        block.coinD0         = coinD0;          ////////// новое //////////
+        block.coinD1         = coinD1;          ////////// новое //////////
         block.nNonce         = nNonce;
-        block.Dbase[0]       = Dbase[0];          ////////// новое //////////
-        block.Dbase[1]       = Dbase[1];          ////////// новое //////////
-        block.coinDs[0]      = coinDs[0];         ////////// новое //////////
-        block.coinDs[1]      = coinDs[1];         ////////// новое //////////
         return block;
     }
 
@@ -1018,11 +1022,11 @@ public:
         READWRITE(hashMerkleRoot);
         READWRITE(nTime);
         READWRITE(nBits);
+        READWRITE(dBase0);        ////////// новое //////////
+        READWRITE(dBase1);        ////////// новое //////////
+        READWRITE(coinD0);        ////////// новое //////////
+        READWRITE(coinD1);        ////////// новое //////////
         READWRITE(nNonce);
-        READWRITE(Dbase[0]);        ////////// новое //////////
-        READWRITE(Dbase[1]);        ////////// новое //////////
-        READWRITE(coinDs[0]);       ////////// новое //////////
-        READWRITE(coinDs[1]);       ////////// новое //////////
     )
 
     uint256 GetBlockHash() const
@@ -1034,10 +1038,10 @@ public:
         block.nTime           = nTime;
         block.nBits           = nBits;
         block.nNonce          = nNonce;
-        block.Dbase[0]        = Dbase[0];          ////////// новое //////////
-        block.Dbase[1]        = Dbase[1];          ////////// новое //////////
-        block.coinDs[0]       = coinDs[0];         ////////// новое //////////
-        block.coinDs[1]       = coinDs[1];         ////////// новое //////////
+        block.dBase0          = dBase0;          ////////// новое //////////
+        block.dBase1          = dBase1;          ////////// новое //////////
+        block.coinD0          = coinD0;          ////////// новое //////////
+        block.coinD1          = coinD1;          ////////// новое //////////
         return block.GetHash();
     }
 
